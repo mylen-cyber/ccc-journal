@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIMCHI & TACOS — CCC Journal 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06090F;--surface:#0C1221;--surface2:#111A2E;--red:#FF3B30;--yellow:#FFD60A;--green:#30D158;--mint:#00E5A0;--purple:#BF5AF2;--blue:#0A84FF;--orange:#FF9F0A;--text:#F0F2FF;--muted:#7A8AA0;--border:rgba(255,255,255,0.06);--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6;overflow-x:hidden;}
+.cover{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
+.cover-left{display:flex;flex-direction:column;justify-content:flex-end;padding:80px;background:var(--bg);position:relative;z-index:2;}
+.cover-label{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
+.cover-title{font-family:var(--font-display);line-height:0.88;letter-spacing:-1px;margin-bottom:48px;}
+.word-kimchi{display:block;font-size:clamp(72px,10vw,160px);color:var(--red);}
+.word-amp{display:block;font-size:clamp(40px,5vw,80px);color:var(--yellow);}
+.word-tacos{display:block;font-size:clamp(72px,10vw,160px);color:var(--mint);}
+.cover-meta{margin-bottom:48px;}
+.cover-subtitle{font-size:17px;font-weight:300;color:rgba(240,242,255,0.6);margin-bottom:6px;}
+.cover-course{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.25);}
+.cover-name-wrap{margin-bottom:48px;}
+.cover-name-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.cover-name-field{background:transparent;border:none;border-bottom:2px solid var(--yellow);color:var(--text);font-family:var(--font-body);font-size:22px;font-weight:700;outline:none;width:100%;padding-bottom:6px;}
+.cover-name-field::placeholder{color:var(--muted);font-weight:300;}
+.cover-enter{display:inline-flex;align-items:center;gap:14px;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;transition:color 0.2s;}
+.cover-enter:hover{color:var(--text);}
+.arrow-line{width:44px;height:1px;background:currentColor;position:relative;flex-shrink:0;}
+.arrow-line::after{content:'';position:absolute;right:0;top:-3px;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);}
+.cover-right{position:relative;overflow:hidden;}
+.cover-right-blocks{height:100%;display:flex;flex-direction:column;}
+.block-r{flex:1;background:var(--red);opacity:0.85;}
+.block-y{flex:0.4;background:var(--yellow);}
+.block-m{flex:1;background:var(--mint);opacity:0.85;}
+.block-d{flex:1.2;background:var(--surface);}
+.cover-right-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;z-index:2;pointer-events:none;}
+.crt-big{font-family:var(--font-display);font-size:clamp(60px,8vw,120px);color:rgba(255,255,255,0.12);letter-spacing:8px;line-height:1;}
+.crt-tag{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.15);}
+.progress-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 60px;display:flex;align-items:center;gap:20px;}
+.ps-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.ps-track{flex:1;height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;}
+.ps-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--mint));border-radius:2px;transition:width 0.8s cubic-bezier(0.16,1,0.3,1);}
+.ps-count{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(6,9,15,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:0 60px;height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.nav-filters{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto;}
+.fb{padding:6px 15px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:0.5px;border-radius:100px;cursor:pointer;transition:all 0.18s;white-space:nowrap;flex-shrink:0;}
+.fb:hover{border-color:rgba(255,255,255,0.25);color:var(--text);}
+.fb.active{font-weight:700;}
+.fb[data-f="all"].active{background:var(--text);border-color:var(--text);color:#000;}
+.fb[data-f="korea-life"].active{background:var(--red);border-color:var(--red);color:#fff;}
+.fb[data-f="taco-quest"].active{background:var(--yellow);border-color:var(--yellow);color:#000;}
+.fb[data-f="cultural-notes"].active{background:var(--mint);border-color:var(--mint);color:#000;}
+.fb[data-f="frustrations"].active{background:var(--purple);border-color:var(--purple);color:#fff;}
+.fb[data-f="class-insights"].active{background:var(--blue);border-color:var(--blue);color:#fff;}
+.nav-actions{display:flex;gap:8px;flex-shrink:0;}
+.btn{padding:8px 18px;border-radius:100px;font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:0.5px;cursor:pointer;transition:all 0.18s;border:1px solid transparent;}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--muted);}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.3);color:var(--text);}
+.btn-primary{background:var(--yellow);color:#000;border-color:var(--yellow);}
+.btn-primary:hover{background:#ffe033;transform:scale(1.02);}
+.journal{max-width:1440px;margin:0 auto;padding:72px 60px;}
+.journal-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;}
+.jh-left{display:flex;align-items:baseline;gap:20px;}
+.journal-title{font-family:var(--font-display);font-size:64px;letter-spacing:3px;line-height:1;}
+.journal-count{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+.disclaimer{display:flex;align-items:flex-start;gap:12px;background:rgba(255,214,10,0.07);border:1px solid rgba(255,214,10,0.2);border-radius:12px;padding:14px 20px;margin-bottom:40px;font-size:13px;color:rgba(240,242,255,0.55);line-height:1.6;}
+.disclaimer-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start;}
+.card{background:var(--surface);border-radius:20px;padding:28px 28px 24px;border:1px solid var(--border);position:relative;overflow:hidden;transition:transform 0.22s,box-shadow 0.22s;}
+.card:hover{transform:translateY(-5px);box-shadow:0 24px 64px rgba(0,0,0,0.5);}
+.card.featured{grid-column:span 2;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.card.cat-korea-life::before{background:var(--red);}
+.card.cat-taco-quest::before{background:var(--yellow);}
+.card.cat-cultural-notes::before{background:var(--mint);}
+.card.cat-frustrations::before{background:var(--purple);}
+.card.cat-class-insights::before{background:var(--blue);}
+.card-ghost{position:absolute;top:-8px;right:12px;font-family:var(--font-display);font-size:110px;line-height:1;color:rgba(255,255,255,0.035);pointer-events:none;user-select:none;letter-spacing:-2px;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
+.card-week-text{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px;}
+.card-date-text{font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;}
+.card-mood-wrap{text-align:right;}
+.card-mood-emoji{font-size:22px;display:block;line-height:1;}
+.card-mood-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:3px;}
+.cat-pill{display:inline-block;padding:4px 12px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+.cat-korea-life .cat-pill{background:rgba(255,59,48,.14);color:var(--red);}
+.cat-taco-quest .cat-pill{background:rgba(255,214,10,.14);color:var(--yellow);}
+.cat-cultural-notes .cat-pill{background:rgba(0,229,160,.14);color:var(--mint);}
+.cat-frustrations .cat-pill{background:rgba(191,90,242,.14);color:var(--purple);}
+.cat-class-insights .cat-pill{background:rgba(10,132,255,.14);color:var(--blue);}
+.card-title{font-family:var(--font-display);font-size:28px;letter-spacing:0.5px;line-height:1.1;color:var(--text);margin-bottom:14px;}
+.card-body{font-size:13.5px;line-height:1.75;color:rgba(240,242,255,0.6);outline:none;min-height:64px;white-space:pre-line;transition:color 0.2s;border-radius:8px;padding:2px;margin:-2px;}
+.card-body:focus{color:var(--text);background:rgba(255,255,255,0.03);box-shadow:0 0 0 1px rgba(255,255,255,0.08);}
+.edit-hint{display:block;margin-top:10px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.18);transition:opacity 0.2s;}
+.card:focus-within .edit-hint{opacity:0;}
+.card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
+.tag{font-size:11px;color:var(--muted);}
+.empty-state{grid-column:1/-1;text-align:center;padding:80px 40px;color:var(--muted);}
+.empty-big{font-size:52px;margin-bottom:16px;}
+.empty-state h3{font-family:var(--font-display);font-size:36px;color:var(--text);margin-bottom:8px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;padding:24px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;position:relative;}
+.modal-title{font-family:var(--font-display);font-size:48px;letter-spacing:2px;margin-bottom:32px;color:var(--yellow);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.form-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);}
+.form-input,.form-select,.form-textarea{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 16px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:border-color 0.18s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(255,255,255,0.3);}
+.form-select option{background:#1a2540;}
+.form-textarea{min-height:130px;resize:vertical;line-height:1.65;}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+.site-footer{text-align:center;padding:60px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.12);border-top:1px solid var(--border);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.card{animation:fadeUp 0.4s ease both;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<section class="cover" id="top">
+  <div class="cover-left">
+    <div class="cover-label">Cross-Cultural Communication · IS618 · Ewha GSIS · Spring 2026</div>
+    <h1 class="cover-title">
+      <span class="word-kimchi">Kimchi</span>
+      <span class="word-amp">&amp;</span>
+      <span class="word-tacos">Tacos</span>
+    </h1>
+    <div class="cover-meta">
+      <div class="cover-subtitle">An Ethnographic Field Journal</div>
+      <div class="cover-course">IS 618 · Prof. Willoughby · March – June 2026</div>
+    </div>
+    <div class="cover-name-wrap">
+      <div class="cover-name-label">Student Name</div>
+      <input class="cover-name-field" type="text" placeholder="Your Name Here" id="studentName" autocomplete="off">
+    </div>
+    <a class="cover-enter" href="#journal" id="enterBtn">
+      <span class="arrow-line"></span>
+      Enter Journal
+    </a>
+  </div>
+  <div class="cover-right">
+    <div class="cover-right-blocks">
+      <div class="block-r"></div>
+      <div class="block-y"></div>
+      <div class="block-m"></div>
+      <div class="block-d"></div>
+    </div>
+    <div class="cover-right-text">
+      <div class="crt-big">FIELD<br>NOTES</div>
+      <div class="crt-tag">Seoul · Spring 2026</div>
+    </div>
+  </div>
+</section>
+
+<div class="progress-strip">
+  <span class="ps-label">Journal Progress</span>
+  <div class="ps-track"><div class="ps-fill" id="psFill" style="width:0%"></div></div>
+  <span class="ps-count" id="psCount">0 / 12 weeks</span>
+</div>
+
+<nav class="nav">
+  <div class="nav-filters">
+    <button class="fb active" data-f="all">All Entries</button>
+    <button class="fb" data-f="korea-life">🇰🇷 Korea Life</button>
+    <button class="fb" data-f="taco-quest">🌮 Taco Quest</button>
+    <button class="fb" data-f="cultural-notes">💡 Cultural Notes</button>
+    <button class="fb" data-f="frustrations">😤 Frustrations</button>
+    <button class="fb" data-f="class-insights">📚 Class Insights</button>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="window.print()">🖨 Print / PDF</button>
+    <button class="btn btn-primary" onclick="openModal()">+ New Entry</button>
+  </div>
+</nav>
+
+<main class="journal" id="journal">
+  <div class="journal-header">
+    <div class="jh-left">
+      <h2 class="journal-title">FIELD LOGS</h2>
+      <span class="journal-count" id="jCount">12 entries</span>
+    </div>
+  </div>
+  <div class="disclaimer">
+    <span class="disclaimer-icon">📌</span>
+    <span>Disclaimer: this journal was started late so there might be a slight mix up in the timing of events. Some things discussed in one week's entry may have actually happened in the week before or after.</span>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="modal-bg" id="modalBg" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="modal-title">NEW ENTRY</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Week #</label><input class="form-input" type="number" id="fWeek" min="1" max="15" placeholder="e.g. 5"></div>
+      <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="text" id="fDate" placeholder="e.g. April 14, 2026"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Entry Title</label><input class="form-input" type="text" id="fTitle" placeholder="Name this moment..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="fCat"><option value="korea-life">🇰🇷 Korea Life</option><option value="taco-quest">🌮 Taco Quest</option><option value="cultural-notes">💡 Cultural Notes</option><option value="frustrations">😤 Frustrations</option><option value="class-insights">📚 Class Insights</option></select></div>
+      <div class="form-group"><label class="form-label">Mood</label><select class="form-select" id="fMood"><option value="😮|Surprised">😮 Surprised</option><option value="🤔|Reflective">🤔 Reflective</option><option value="🔍|Investigative">🔍 Investigative</option><option value="💭|Thinking">💭 Thinking</option><option value="🎉|Excited">🎉 Excited</option><option value="✨|In Awe">✨ In Awe</option><option value="😤|Frustrated">😤 Frustrated</option><option value="👀|Observing">👀 Observing</option><option value="🧐|Curious">🧐 Curious</option><option value="😩|Drained">😩 Drained</option><option value="🌀|Rethinking">🌀 Rethinking</option><option value="🎓|Proud">🎓 Proud</option><option value="❤️|Grateful">❤️ Grateful</option><option value="😅|Overwhelmed">😅 Overwhelmed</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Your Entry</label><textarea class="form-textarea" id="fBody" placeholder="Write your thoughts, reactions, observations..."></textarea></div>
+    <div class="form-group"><label class="form-label">Tags (comma separated)</label><input class="form-input" type="text" id="fTags" placeholder="#Seoul, #TacoQuest, #Week5"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEntry()">Save Entry →</button>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">Kimchi &amp; Tacos · IS618 Cross-Cultural Communication Journal · Ewha GSIS · Spring 2026</footer>
+
+<script>
+const CATS = {
+  'korea-life':     { label: '🇰🇷 Korea Life' },
+  'taco-quest':     { label: '🌮 Taco Quest' },
+  'cultural-notes': { label: '💡 Cultural Notes' },
+  'frustrations':   { label: '😤 Frustrations' },
+  'class-insights': { label: '📚 Class Insights' }
+};
+
+let entries = [
+  {
+    id:1, week:1, date:"March 3, 2026",
+    title:"Finally. Here We Are.",
+    category:"class-insights", mood:"🎉", moodLabel:"Excited", featured:false,
+    body:`I was supposed to start this journal earlier but as any other student I am starting as the deadline approaches.
+
+Okay week 1. I have been wanting to take this class since my second semester at Ewha. It just was never offered and every time I checked the course list I'd feel that small disappointment of "not this semester either." So when I saw IS618 in the list for my final semester I didn't even think twice. It was going on my schedule no matter what.
+
+The thing about prof. Willoughby's classes is that they don't feel like classes. It's more like a workshop where you slowly start questioning everything you thought you knew about yourself and the world around you. I wanted that one more time before I leave Ewha.
+
+I walked in expecting something small and intimate because the class I took with her last semester was exactly that. That kind of setting where everyone knows everyone and there's this comfortable energy where people actually say what they think. So I was genuinely surprised to find so many people. So many nationalities in one room. I mean at GSIS that's kind of always the case but this felt different. More crowded than I was prepared for. I'll be honest big classes are more draining for me. There's just more noise more energy to manage. But I also can't deny that within the first hour I was already hearing perspectives that I never would have heard in a room of five people. So I'll take it.
+
+When prof. Willoughby introduced the ethnographic research project something in me immediately lit up. A hands-on real-world thing. Not just reading and discussing but actually going out and looking at something. My first instinct was the Russian quarter. There's this whole pocket of Seoul right in the center that genuinely feels like a different world. I've walked through it before and always thought "someone should study this." But I quickly realized not everyone shared my enthusiasm for that direction. Fair enough.
+
+So mexican food in Seoul. My second idea and honestly maybe the better one for me personally. I've always been curious about Latin American culture. Like genuinely curious. But back home that curiosity had nowhere to really go. It was just this abstract "I'd like to know more about that someday" kind of feeling. And then it hit me standing in this classroom in Seoul of all places: being in Korea doesn't mean I can only explore Korean culture. There's Mexican, Indian, Indonesian and so many others all distinctly present here, all offering a window into worlds I never had access to before.
+
+That thought kind of cracked something open for me. Prof. Willoughby has a way of doing that.`,
+    tags:["#Week1","#ClassInsights","#ProfWilloughby","#WhyImHere","#TacoQuestBegins"]
+  },
+  {
+    id:2, week:2, date:"March 10, 2026",
+    title:"So... What Even IS Culture?",
+    category:"cultural-notes", mood:"🤔", moodLabel:"Reflective", featured:true,
+    body:`Week 2 and we're already asking the big questions. What is culture? Williams says it's a whole way of life political contested always being remade. Jameson says your cultural identity isn't a fixed box it shifts it's performed it's negotiated depending on who you're with and where you are. And honestly I can't fully pick a side. I think both of them are right depending on when you're asking. A hundred years ago one definition probably fit better. Today you need something else entirely.
+
+If I had to choose though I lean Jameson. Because I am living proof that cultural identity doesn't sit still.
+
+Here's the thing I've been sitting with all week: what culture do I even belong to? Or have I just made my own? One that only really describes me and nobody else?
+
+I was born Armenian. Strong cultural identity deep roots people have very specific images in their heads when they hear that. And for a long time I thought okay that's my culture that's my baseline. But then I started actually paying attention. I spent part of my childhood in Moscow so there's Russian in there. Then teenage years and an embarrassing amount of Western media consumption so that got in too. And now Korea for over two years and I can feel that quietly settling into me as well.
+
+So what am I exactly? I think the most honest answer is: a cultural salad with Armenian base dressing and some foreign ingredients.
+
+The funny part is I always thought I hadn't let my Armenian identity affect me that much. Like I was somehow above it or outside of it. But that was naive. It's the base. It's always the base. Everything else got added on top of it not instead of it.
+
+And yet I'm definitely not the Armenian people picture when they hear where I'm from.
+
+Prof. Willoughby has this way of handing you a reading and somehow making it turn into a mirror. I came to class to discuss definitions of culture and left wondering who I actually am. Typical.`,
+    tags:["#Week2","#WhatIsCulture","#Jameson","#Williams","#CulturalIdentity","#CulturalSalad"]
+  },
+  {
+    id:3, week:3, date:"March 17, 2026",
+    title:"Confucius Would Be Confused Too",
+    category:"cultural-notes", mood:"🤔", moodLabel:"Reflective", featured:false,
+    body:`Week 3 was about cultural competence and communication styles in Asia. Spitzberg talking about intercultural competence as a skill you build not something you just have. Miike on the Asiacentric worldview and how harmony and interconnectedness drive communication here rather than individual self expression. And Yum on Confucianism and how it shaped the way people in East Asia communicate. Hierarchy indirectness in-group and out-group all of that.
+
+I'll be honest I don't remember much from that class specifically. But the themes stuck with me because I live them every day.
+
+The hierarchy thing. I cannot wrap my head around it no matter how long I stay here. There's this whole system built around age and job position and the language reflects it completely. Different word endings different vocabulary different levels of speech depending on who you're talking to. It's deeply embedded and in theory it sounds like a form of respect I guess.
+
+But then I get on the metro.
+
+An elderly person walks in and nobody moves. Everyone's on their phone or suddenly very interested in the floor. And it's not like this is rare. The "respect your elders" thing seems to stop exactly at the grammar and I find that genuinely hard to understand. If the hierarchy is real enough to shape your entire language why doesn't it show up in the small daily moments that actually matter? Why are there so many elderly people working jobs they shouldn't have to work at that age or living completely alone?
+
+Maybe I'm missing something cultural here. Maybe there's an explanation I don't have access to yet. But from where I'm standing the hierarchy feels more like a linguistic performance than an actual value system and that disconnect is something I keep thinking about.
+
+Also this week prof. Willoughby told us to find a partner based on whose idea resonated most. My partner is Monse who I believe is from Mexico and when she brought up Mexican culture I thought okay that could work. So the taco quest is officially a two person operation now.`,
+    tags:["#Week3","#Confucianism","#Hierarchy","#KoreanCulture","#TacoQuest","#Monse"]
+  },
+  {
+    id:4, week:4, date:"March 24, 2026",
+    title:"American Factory Broke Me a Little",
+    category:"class-insights", mood:"💭", moodLabel:"Thinking", featured:false,
+    body:`American Factory was a whole emotional rollercoaster. I laughed I was concerned about the workers and the immigrants and at some point I was just sitting there like okay this is a lot.
+
+The scene that got me the most was when a high ranking American guy attended some kind of year end celebration in China with the workers and got emotional. Said something like "after all we are one no matter where we are in the globe." And I genuinely felt that. That moment of a person in power choosing to just be human for a second.
+
+But then the rest of the film kept reminding me why those moments are rare.
+
+The Chinese management style in the film triggered something very specific in me because I have seen it before. Not in China. In Armenia. I worked at a Korean company back home before ever moving to Korea. The CEO and most of the staff were Korean and even though they came to our country opened a business on our land and hired our people there was never a sense of appreciation or respect going the other way. It was more like "you should be glad we chose your country to invest in." They never once tried to understand Armenian workplace culture. The way we communicate the way we discuss things. Because in Armenia no matter your position in a company you speak like a human to another human. You have real discussions. You respect your boss but it's not blind respect it's not hierarchical worship.
+
+And that's what I kept thinking about watching American Factory. That "we are the best" mentality that walks into a room and doesn't consider that the people already in that room might have their own valid way of doing things. It annoyed me when I lived it and it annoyed me watching it on screen.
+
+On a lighter note me and Monse are moving along with the project proposal. She knows a lot more about Mexican culture in Seoul than I do so naturally her idea took shape. Two Mexican restaurants in Seoul one owned by a Mexican and one owned by a Korean and we look at authenticity. I agreed and honestly it's a solid concept. Everything is going smooth so far and I'm sure it'll stay that way.`,
+    tags:["#Week4","#AmericanFactory","#PowerDistance","#Korea","#Armenia","#ProjectProposal"]
+  },
+  {
+    id:5, week:5, date:"March 31, 2026",
+    title:"Burritos, Temples and Emic/Etic",
+    category:"taco-quest", mood:"🎉", moodLabel:"Excited", featured:true,
+    body:`This week we talked about emic and etic approaches to fieldwork and the moment I heard the definitions I immediately thought about our project. Emic is looking at a culture from the inside the way insiders do and etic is the outside analytical view. And I think we accidentally have the perfect setup for both. Monse is Mexican. It's literally her culture her food her people. She brings the emic perspective naturally. And I come in completely fresh with zero personal connection to the cuisine so I get to be the etic observer. I think that's actually going to make our research stronger.
+
+Since I knew we'd be going to the restaurants for real soon I decided to try some things beforehand so I'm not walking in completely blind. I tried a burrito, tacos, nachos and guacamole. The guacamole I had actually had before separately it's weirdly popular in Armenia just as a dip. But everything else was new.
+
+And here's the thing I noticed. The reason Latin American cuisine never really took off in Armenia suddenly made total sense to me. We already have our own versions of everything. Shawarma is basically the burrito of Armenia. Wrap with meat, potatoes, veggies and sauce. And lahmajun is basically a flat open taco. People in Armenia aren't going to suddenly go crazy for a cuisine that offers them something they already have a local version of. From a pure business perspective it just wouldn't work. The competition is already embedded in the culture.
+
+The other thing that happened this week that had nothing to do with the project but everything to do with my general state of mind was visiting Jogyesa temple. It's right in the center of Seoul which is why I wasn't expecting much honestly. I lived in Busan for a year and went to basically every temple there including Haedong Yongungsa which is right by the ocean and genuinely one of the most beautiful places I've seen. So a small temple in downtown Seoul didn't sound like it would compare.
+
+But it became my favorite.
+
+I can't fully explain it. The calmness of it. This little pocket of complete stillness surrounded by one of the busiest cities in the world. Metropolitan oasis is the only way I can describe it. Sometimes Seoul gives you something when you're not looking for it.`,
+    tags:["#Week5","#EmicEtic","#TacoQuest","#ArmenianFood","#Jogyesa","#Seoul","#Fieldwork"]
+  },
+  {
+    id:6, week:6, date:"April 7, 2026",
+    title:"Why Koreans Feel Closer Than Europeans",
+    category:"cultural-notes", mood:"✨", moodLabel:"In Awe", featured:false,
+    body:`This week's class was one of those ones where something just clicks and you feel slightly embarrassed it took this long.
+
+We talked about collectivism vs individualism and I had this question that's been floating around in my head for a while now. Why is it sometimes easier for me to connect with East Asian friends than with European ones? Armenia is geographically right there next to Europe. Culturally you'd assume the overlap would be bigger. And yet so many times I've felt more understood more at ease more on the same page with Korean or Chinese friends than with people from Western or Northern Europe.
+
+And then Hofstede laid it out and I just sat there like oh. Obviously.
+
+Armenia is a collectivist culture. Most of Asia is collectivist. Europe especially Western and Northern Europe is individualistic. It was always right there. The reason I feel that pull toward East Asian mentality is because we come from the same base value of the group over the individual. Family loyalty community belonging taking care of each other showing up. These are things that feel natural to me and they feel natural here too.
+
+I genuinely felt a little dumb in that moment. The answer was so simple and I had been overcomplicating it for years.
+
+The other thought I couldn't stop thinking about was the relationship between collectivism and development. The more developed a country gets the more individualistic it seems to become. Like development and individualism move together. Whether that's a good thing or not I'm not sure. Maybe it's just an observation. But it made me think about what Armenia is slowly moving toward and whether that shift is something to welcome or something to be careful about.`,
+    tags:["#Week6","#Collectivism","#Individualism","#Hofstede","#Armenia","#Korea","#CulturalIdentity"]
+  },
+  {
+    id:7, week:7, date:"April 14, 2026",
+    title:"Eight Years in the Making",
+    category:"korea-life", mood:"🎉", moodLabel:"Excited", featured:false,
+    body:`No class this week just a meeting with prof. Willoughby to check in on where the project is going. We have a clear idea what we're doing and Monse and I came prepared with questions for the restaurant owners. Monse is currently negotiating dates with both restaurants but all of us have packed schedules so finding a day that works for everyone is proving harder than expected. The Cultural Exploration Paper was also due this week. I basically wrote about the same themes I've been exploring here in the journal, felt natural to connect it all.
+
+Now the unrelated but very related thing.
+
+I went to my first ever Kpop concert this week. BTS. After almost 3 years living in Korea. I had been to plenty of concerts here but always international artists, never Kpop and the reason is simple they are the only Kpop group I actually like. I have been wanting to see them for 8 years. Eight years. And I finally did it and I was so proud of myself and so emotional in the best way possible. It was a dream I had been carrying around for almost a decade and it came true in the city I live in. I know this isn't the most academic journal entry but it's also a diary so here we are.
+
+One thing I noticed though that is actually worth writing about here is the concert culture. In Armenia concerts are a different experience. People think about their own comfort first. Someone will jump on another person's shoulders blocking everyone behind them. Phones go up everywhere recording, arms raised and for people in the back it's basically impossible to see anything. It's every person for themselves.
+
+Here it was completely different. There was this unanimous unspoken culture of mutual respect running through the entire crowd of 50000 people. Nobody blocked anyone deliberately, everyone was considerate of the space around them and what struck me most was that even foreigners who were clearly there for the first time just instinctively picked up on it and behaved the same way. Nobody told them the rules. They just read the room and followed. That's culture working in its quietest and most powerful form and I noticed it standing in that crowd more clearly than I have in any classroom.`,
+    tags:["#Week7","#ProjectUpdate","#BTS","#Concert","#ConcertCulture","#KoreaLife"]
+  },
+  {
+    id:8, week:8, date:"April 21, 2026",
+    title:"Apparently I Look Frustrated When I'm Fine",
+    category:"cultural-notes", mood:"👀", moodLabel:"Observing", featured:false,
+    body:`Prof. Willoughby has this thing where she introduces topics in ways that actually make you experience the concept before you even know what you're studying. This week was non verbal communication and she had us find each other and form groups based purely on the emotion we were silently showing on our face. No words just faces.
+
+Mine was tired.
+
+I was kind of counting on people guessing it without me even trying because honestly I always feel tired and I've been told it shows. But the first classmate who approached me asked if I was showing frustration. So apparently my natural resting state reads as frustration to people. Good to know. Genuinely need to work on that.
+
+The non verbal habit I've picked up in Korea that I use all the time now is the silent bow. It is so genuinely useful I don't understand how I communicated without it before. You walk into class late and want to apologize without interrupting everyone you bow. You want to greet someone across the room without shouting you bow. You're grateful and words feel like too much you bow. It replaces so many sentences with one small movement and it's never awkward. I've fully adopted it and I don't think I'm giving it up when I leave.
+
+The part of the class I had more trouble with was the body language and micro expression theories. The whole framework of crossed arms means you're defensive hand under chin means disinterested raised eyebrow means you're lying. I understand why these patterns exist and why researchers found them but I think they get applied way too rigidly. I cross my arms all the time because it helps me keep my posture straight. That's it. No defensiveness no closed energy just spine support. And I can think of ten other examples like that. Context matters so much and I feel like these theories sometimes flatten human behaviour into a checklist which is the opposite of what cross cultural communication should be doing.`,
+    tags:["#Week8","#NonVerbal","#SilentBow","#BodyLanguage","#Korea","#ClassActivity"]
+  },
+  {
+    id:9, week:9, date:"April 28, 2026",
+    title:"Lost Between Two Worlds",
+    category:"korea-life", mood:"💭", moodLabel:"Thinking", featured:true,
+    body:`A few weeks left till the end of semester and it feels like we just started. Time really does fly especially when you are juggling classes, assignments, job searching and a thousand tiny other things all at once.
+
+I've been actively looking for jobs and internships lately. Went to a few job fairs but it's becoming clear pretty quickly that companies here aren't particularly interested in someone from a region they have no business ties with. It's frustrating in a very specific quiet way. Not dramatic just there.
+
+And then I catch myself thinking: a few weeks ago I was sitting in class genuinely annoyed by Korean work culture. The hierarchy the blind respect the dynamic I experienced firsthand at that Korean company back home. And now here I am trying to get a job in Korea and stay. Trying to become part of that same system I was criticizing. I don't think that makes me a hypocrite. I think it just means time changes things and people are complicated and you can critique something and still choose it.
+
+I'm not sure I can go back home. And that sentence is harder to sit with than I expected. Not because home is bad but because home doesn't quite feel like home anymore either. Something shifted at some point while I wasn't paying attention and now I'm somewhere in between. Not fully here and not fully there.
+
+I wasn't planning to write about this here but I think it belongs. Losing yourself between two worlds and not being fully claimed by either one is a price that every travel curious culture hungry person eventually pays. You gain so much and somewhere along the way you quietly give up the simple certainty of knowing exactly where you belong.
+
+As for the gender and cultured bodies class this week I'll be honest I was completely disconnected. My head was elsewhere. Sometimes the semester catches up with you and a class just passes through.`,
+    tags:["#Week9","#JobSearch","#BetweenTwoWorlds","#Seoul","#Home","#Identity","#KoreaLife"]
+  },
+  {
+    id:10, week:10, date:"May 5, 2026",
+    title:"Salsa Rica and the Real Mexican Food Conversation",
+    category:"taco-quest", mood:"🎉", moodLabel:"Excited", featured:true,
+    body:`Finally. After weeks of trying to match three different schedules me and Monse made it to Salsa Rica to interview the owner for our project. It took so long to coordinate that by the time we actually walked in I had almost forgotten what it felt like to be in fieldwork mode.
+
+The owner was not what I expected and I mean that in the best way. He was loud, warm, smiley and made jokes from the first five minutes. Nothing like the reserved polite Korean communication style I'm used to here. Talking to him felt more like talking to someone at a family gathering than a formal interview. The conversation was mostly in Spanish which made things interesting for me since my Spanish is basically nonexistent. He would switch to English for my benefit and when that got hard we agreed he'd speak Spanish and Monse would translate later. What surprised me though was how much I actually understood just from listening. My background with other Romance and Germanic languages filled in more gaps than I expected. Something clicked and I was following along more than I should have been able to.
+
+His story was genuinely interesting. He started working at another Mexican restaurant in Seoul and over time noticed that what was being served wasn't really Mexican food. The authenticity issue bothered him enough that he decided to open his own place and do it properly. Walking into Salsa Rica you feel that intention immediately. Bright colors, authentic decor, the whole energy of it feels like someone built it with care not just for profit.
+
+He was also very clear about who he's cooking for. He said he doesn't target Koreans with his menu at all. If they come in and like what's on offer great and if they don't that's their problem. It was blunt and I respected it. He's not adapting his food to local taste. He's creating a space for the Latin American community in Seoul to feel at home and that's it.
+
+Then came my humbling moment of the day. During the interview it became clear that what I had tried before coming here and proudly called Mexican food wasn't actually Mexican food. It was Tex-Mex. The North American adaptation of Mexican cuisine that most of the world knows and assumes is the real thing. I had told Monse I had tried Mexican food. She just nodded and went along with it. And I sat there during that interview slowly realizing I had no idea what I was talking about. I should have known better honestly. But at least now I know and now I actually want to try the real thing properly.
+
+Overall it just felt good to meet someone who genuinely loves what they do and cares about doing it right. He's not running a restaurant he's building a small home for a community far from home. That's something else entirely.`,
+    tags:["#Week10","#SalsaRica","#TacoQuest","#Fieldwork","#TexMex","#Authenticity","#Interview"]
+  },
+  {
+    id:11, week:11, date:"May 12, 2026",
+    title:"The Survey, the Interview and the Thing I Almost Didn't Write",
+    category:"taco-quest", mood:"🌀", moodLabel:"Rethinking", featured:true,
+    body:`I genuinely went back and forth on whether to include this or not. I didn't think I'd have anything frustrating to write about with this project because it had been going smoothly. But I said I'd be honest here so.
+
+Getting an interview date with Ay Mamita was a whole process. The owner kept being unavailable, we'd finally match a date and then something would come up on her end. She got sick once, then something else happened another time. At some point I suggested to Monse that maybe we could just send the questions online and ask her to reply even briefly. Just to have something.
+
+What happened next was that Monse messaged me one day to say she had gone and seen her. Just like that. She went alone, did the interview and told me after.
+
+I didn't ask her why she didn't tell me or invite me. I didn't want to make it a thing because at least we had the interview and that was what mattered for the project. But it did feel weird. It's a group project. I'm not sure what to do with that feeling exactly so I'm just putting it here and leaving it.
+
+Anyway. We had both interviews and I was relieved. Meanwhile I had been sending out our survey through different channels trying to get as many responses as possible. We didn't get a huge number back but what we got was solid and honestly enough to work with.
+
+The results were interesting. In general Mexican restaurants in Korea tend not to be very authentic and mostly serve Tex-Mex adaptations. But when we looked specifically at Salsa Rica and Ay Mamita our two target restaurants the scores came out above average, closer to very authentic. Which was genuinely satisfying because it lined up exactly with what both owners said in their interviews. The data and the stories matched. That doesn't always happen and when it does it feels like the research actually worked.`,
+    tags:["#Week11","#AyMamita","#Survey","#TacoQuest","#Fieldwork","#Frustrations","#Authenticity"]
+  },
+  {
+    id:12, week:12, date:"May 19, 2026",
+    title:"And That's a Wrap.",
+    category:"class-insights", mood:"🎓", moodLabel:"Proud", featured:false,
+    body:`Presentation day. Me and Monse split it based on what we each worked on more. I took the survey part, she took the interviews. It went well. No major nerves, no disasters, just two people presenting something they actually spent time on and believed in. There weren't many questions after which was fine. I said what I had to say.
+
+And that's kind of it. The semester is over.
+
+I want to wrap up this journal the way I should have started it which is with intention. I signed up for this class in my second semester at Ewha when it wasn't even offered yet. I waited. And taking it as my very last semester here felt right in a way I can't fully explain.
+
+I came in curious. I leave with answers. Not all of them but enough. I understood why I connect more easily with East Asian friends than European ones. I understood what kind of cultural salad I actually am. I found words for things I had been observing in Korea for three years without being able to articulate. I learned that what I thought was Mexican food was Tex-Mex. I learned that authenticity is complicated and personal and worth researching. I learned that concert culture can teach you more about collective behavior than some textbooks can.
+
+Prof. Willoughby's classes do something specific to you. They don't just give you information they give you a framework for looking at the world differently and once you have that you can't really go back to not seeing it. I am completely satisfied with my choice of this course and I mean that without any exaggeration.
+
+This is my last semester at Ewha. And I will miss all of it more than I am currently ready to admit.`,
+    tags:["#Week12","#Presentation","#LastSemester","#Reflection","#Ewha","#Willoughby","#Done"]
+  }
+];
+
+let activeFilter = 'all';
+const BASE_IDS = new Set(entries.map(e => e.id));
+let bodyEdits = {};
+
+document.getElementById('studentName').addEventListener('input', function() {
+  try { localStorage.setItem('ccc_j_name', this.value); } catch(_) {}
+});
+
+function load() {
+  try {
+    const n = localStorage.getItem('ccc_j_name');
+    if (n) document.getElementById('studentName').value = n;
+    const edits = localStorage.getItem('ccc_j_edits');
+    if (edits) {
+      bodyEdits = JSON.parse(edits);
+      entries.forEach(e => { if (bodyEdits[e.id] !== undefined) e.body = bodyEdits[e.id]; });
+    }
+    const extra = localStorage.getItem('ccc_j_extra');
+    if (extra) {
+      const parsed = JSON.parse(extra);
+      entries = [...entries, ...parsed];
+      entries.sort((a, b) => a.week - b.week);
+    }
+  } catch(_) {}
+}
+
+function persist() {
+  try {
+    localStorage.setItem('ccc_j_edits', JSON.stringify(bodyEdits));
+    const extra = entries.filter(e => !BASE_IDS.has(e.id));
+    localStorage.setItem('ccc_j_extra', JSON.stringify(extra));
+  } catch(_) {}
+}
+
+function render() {
+  const filtered = activeFilter === 'all' ? entries : entries.filter(e => e.category === activeFilter);
+  const grid = document.getElementById('grid');
+  document.getElementById('jCount').textContent = `${filtered.length} ${filtered.length === 1 ? 'entry' : 'entries'}`;
+  const w = Math.min(entries.length, 12);
+  document.getElementById('psFill').style.width = Math.round((w / 12) * 100) + '%';
+  document.getElementById('psCount').textContent = `${w} / 12 weeks`;
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-big">🔍</div><h3>No entries here yet</h3><p>Switch filter or add a new entry above</p></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map((e, i) => {
+    const cat = CATS[e.category] || CATS['korea-life'];
+    const feat = e.featured ? 'featured' : '';
+    const delay = (i % 9) * 0.05;
+    return `<article class="card cat-${e.category} ${feat}" style="animation-delay:${delay}s">
+      <div class="card-ghost">${String(e.week).padStart(2,'0')}</div>
+      <div class="card-top">
+        <div><span class="card-week-text">Week ${String(e.week).padStart(2,'0')}</span><span class="card-date-text">${e.date}</span></div>
+        <div class="card-mood-wrap"><span class="card-mood-emoji">${e.mood}</span><span class="card-mood-label">${e.moodLabel}</span></div>
+      </div>
+      <div class="cat-pill">${cat.label}</div>
+      <h3 class="card-title">${e.title}</h3>
+      <div class="card-body" contenteditable="true" spellcheck="true" onblur="updateBody(${e.id}, this.innerText)">${e.body}</div>
+      <span class="edit-hint">✏ Click to edit</span>
+      <div class="card-tags">${e.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    </article>`;
+  }).join('');
+}
+
+function updateBody(id, text) {
+  const e = entries.find(x => x.id === id);
+  if (e) { e.body = text; bodyEdits[id] = text; persist(); }
+}
+
+document.querySelectorAll('.fb').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.fb').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    activeFilter = this.dataset.f;
+    render();
+  });
+});
+
+function openModal() { document.getElementById('modalBg').classList.add('open'); }
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+function bgClose(e) { if (e.target === document.getElementById('modalBg')) closeModal(); }
+
+function saveEntry() {
+  const week = parseInt(document.getElementById('fWeek').value) || entries.length + 1;
+  const date = document.getElementById('fDate').value || 'Spring 2026';
+  const title = document.getElementById('fTitle').value || 'Untitled Entry';
+  const category = document.getElementById('fCat').value;
+  const [mood, moodLabel] = document.getElementById('fMood').value.split('|');
+  const body = document.getElementById('fBody').value || 'Your entry goes here...';
+  const tagsRaw = document.getElementById('fTags').value;
+  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+  entries.push({ id: Date.now(), week, date, title, category, mood, moodLabel, featured: false, body, tags });
+  entries.sort((a, b) => a.week - b.week);
+  persist();
+  render();
+  closeModal();
+  ['fWeek','fDate','fTitle','fBody','fTags'].forEach(id => document.getElementById(id).value = '');
+  setTimeout(() => document.getElementById('journal').scrollIntoView({ behavior: 'smooth' }), 120);
+}
+
+document.getElementById('enterBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  document.getElementById('journal').scrollIntoView({ behavior: 'smooth' });
+});
+
+load();
+render();
+</script>
+</body>
+</html>
